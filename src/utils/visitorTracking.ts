@@ -6,78 +6,104 @@ interface VisitorData {
   org: string;
 }
 
-export const trackVisitor = async () => {
-  if (sessionStorage.getItem('visited')) {
-    return;
+interface WebhookEmbed {
+  title: string;
+  color: number;
+  fields: Array<{ name: string; value: string; inline: boolean }>;
+}
+
+const getDeviceType = (ua: string): string => {
+  if (/Mobi|Android/i.test(ua)) return 'Mobile';
+  if (/Tablet|iPad/i.test(ua)) return 'Tablet';
+  return 'Desktop';
+};
+
+const getOS = (ua: string): string => {
+  if (ua.includes('Win')) return 'Windows';
+  if (ua.includes('Mac')) return 'MacOS';
+  if (ua.includes('Linux')) return 'Linux';
+  if (ua.includes('Android')) return 'Android';
+  if (ua.includes('like Mac')) return 'iOS';
+  return 'Unknown OS';
+};
+
+const getBrowser = (ua: string): string => {
+  if (ua.includes('Firefox')) return 'Firefox';
+  if (ua.includes('SamsungBrowser')) return 'Samsung Internet';
+  if (ua.includes('Opera') || ua.includes('OPR')) return 'Opera';
+  if (ua.includes('Trident')) return 'Internet Explorer';
+  if (ua.includes('Edge') || ua.includes('Edg')) return 'Edge';
+  if (ua.includes('Chrome')) return 'Chrome';
+  if (ua.includes('Safari')) return 'Safari';
+  return 'Unknown Browser';
+};
+
+const fetchIpData = async (): Promise<VisitorData | null> => {
+  try {
+    const response = await fetch('https://ipapi.co/json/');
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch IP data:', error);
+    return null; // Graceful fallback if IP API fails
   }
+};
+
+const sendToDiscord = async (embed: WebhookEmbed, webhookUrl: string): Promise<void> => {
+  try {
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ embeds: [embed] }),
+    });
+    
+    if (!response.ok) throw new Error(`Discord API error! status: ${response.status}`);
+  } catch (error) {
+    console.error('Failed to send webhook to Discord:', error);
+  }
+};
+
+export const trackVisitor = async (): Promise<void> => {
+  // Prevent duplicate tracking in the same session
+  if (sessionStorage.getItem('visited')) return;
 
   try {
-    const ipRes = await fetch('https://ipapi.co/json/');
-    const ipData: VisitorData = await ipRes.json();
-
-    const ua = navigator.userAgent;
-    let deviceType = 'Desktop';
-    if (/Mobi|Android/i.test(ua)) {
-      deviceType = 'Mobile';
-    } else if (/Tablet|iPad/i.test(ua)) {
-      deviceType = 'Tablet';
+    const webhookUrl = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
+    if (!webhookUrl) {
+      console.warn("VITE_DISCORD_WEBHOOK_URL is not set in environment variables.");
+      return;
     }
 
+    const ipData = await fetchIpData();
+    const ua = navigator.userAgent;
     const { width, height } = window.screen;
-    const screenSize = `${width}x${height}`;
-    const language = navigator.language;
-    const visitedAt = new Date().toLocaleString();
+    
+    const location = ipData 
+      ? `${ipData.city || 'Unknown'}, ${ipData.region || 'Unknown'}, ${ipData.country_name || 'Unknown'}`
+      : 'Unknown Location';
 
-    // Basic OS extraction
-    let os = 'Unknown OS';
-    if (ua.indexOf('Win') !== -1) os = 'Windows';
-    else if (ua.indexOf('Mac') !== -1) os = 'MacOS';
-    else if (ua.indexOf('Linux') !== -1) os = 'Linux';
-    else if (ua.indexOf('Android') !== -1) os = 'Android';
-    else if (ua.indexOf('like Mac') !== -1) os = 'iOS';
-
-    // Basic Browser extraction
-    let browser = 'Unknown Browser';
-    if (ua.indexOf('Firefox') !== -1) browser = 'Firefox';
-    else if (ua.indexOf('SamsungBrowser') !== -1) browser = 'Samsung Internet';
-    else if (ua.indexOf('Opera') !== -1 || ua.indexOf('OPR') !== -1) browser = 'Opera';
-    else if (ua.indexOf('Trident') !== -1) browser = 'Internet Explorer';
-    else if (ua.indexOf('Edge') !== -1) browser = 'Edge';
-    else if (ua.indexOf('Chrome') !== -1) browser = 'Chrome';
-    else if (ua.indexOf('Safari') !== -1) browser = 'Safari';
-
-    const location = `${ipData.city || 'Unknown'}, ${ipData.region || 'Unknown'}, ${ipData.country_name || 'Unknown'}`;
-
-    const embed = {
+    const embed: WebhookEmbed = {
       title: '🔔 New Visitor',
       color: 0x5865f2,
       fields: [
-        { name: 'IP Address', value: ipData.ip || 'Unknown', inline: true },
+        { name: 'IP Address', value: ipData?.ip || 'Unknown', inline: true },
         { name: 'Location', value: location, inline: true },
-        { name: 'ISP', value: ipData.org || 'Unknown', inline: true },
-        { name: 'Device Type', value: deviceType, inline: true },
-        { name: 'OS', value: os, inline: true },
-        { name: 'Browser', value: browser, inline: true },
-        { name: 'Screen Size', value: screenSize, inline: true },
-        { name: 'Language', value: language, inline: true },
-        { name: 'Visited At', value: visitedAt, inline: false },
+        { name: 'ISP', value: ipData?.org || 'Unknown', inline: true },
+        { name: 'Device Type', value: getDeviceType(ua), inline: true },
+        { name: 'OS', value: getOS(ua), inline: true },
+        { name: 'Browser', value: getBrowser(ua), inline: true },
+        { name: 'Screen Size', value: `${width}x${height}`, inline: true },
+        { name: 'Language', value: navigator.language || 'Unknown', inline: true },
+        { name: 'Visited At', value: new Date().toLocaleString(), inline: false },
       ],
     };
 
-    const webhookUrl = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
-    if (webhookUrl) {
-      await fetch(webhookUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ embeds: [embed] }),
-      });
-      sessionStorage.setItem('visited', 'true');
-    } else {
-      console.warn("VITE_DISCORD_WEBHOOK_URL is not set.");
-    }
+    await sendToDiscord(embed, webhookUrl);
+    
+    // Mark as visited only after successful tracking
+    sessionStorage.setItem('visited', 'true');
+    
   } catch (err) {
-    console.error('Failed to track visitor:', err);
+    console.error('An unexpected error occurred during visitor tracking:', err);
   }
 };

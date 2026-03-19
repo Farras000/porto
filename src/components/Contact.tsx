@@ -37,7 +37,7 @@ export const Contact = () => {
         </div>
       </motion.div>
       <div className="mt-32 text-slate-500 text-sm">
-        <p>© {new Date().getFullYear()} Designed & Built by John Doe.</p>
+        <p>© {new Date().getFullYear()} Designed & Built by AYAS.</p>
       </div>
     </section>
   );

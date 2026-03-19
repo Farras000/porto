@@ -14,7 +14,7 @@ export const Hero = () => {
           Hey there, I am
         </span>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-4">
-          John Doe
+          AYAS
         </h1>
         <h2 className="text-2xl md:text-3xl text-slate-400 font-medium pb-2">
           Full Stack Software Engineer
