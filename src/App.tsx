@@ -1,27 +1,38 @@
 import { useVisitorTracking } from './hooks/useVisitorTracking';
+import { SmoothScroll } from './components/SmoothScroll';
+import { NoiseBackground } from './components/NoiseBackground';
+import { ScrollProgress } from './components/ScrollProgress';
 import { Hero } from './components/Hero';
+import { TextReveal } from './components/TextReveal';
 import { Skills } from './components/Skills';
-import { Projects } from './components/Projects';
+import { HorizontalProjects } from './components/HorizontalProjects';
 import { Contact } from './components/Contact';
+import { Footer } from './components/Footer';
 
 function App() {
   useVisitorTracking();
 
   return (
-    <div className="bg-[#0b1120] min-h-screen text-slate-50 font-sans selection:bg-emerald-500/30 selection:text-emerald-200 antialiased overflow-hidden">
-      <main className="relative">
-        {/* Ambient background glow */}
-        <div className="absolute top-0 -left-4 w-72 h-72 bg-emerald-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob"></div>
-        <div className="absolute top-0 -right-4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-2000"></div>
+    <SmoothScroll>
+      <div className="relative min-h-screen bg-[#07090e] text-[#e2e8f0] font-sans antialiased overflow-x-hidden selection:bg-[#c4f041] selection:text-[#07090e]">
+        {/* Dynamic Film Grain & Interactive Glow Canvas */}
+        <NoiseBackground />
 
-        <div className="relative z-10 w-full h-full">
+        {/* Floating Minimal Navigation & Progress */}
+        <ScrollProgress />
+
+        {/* Main Content Flow */}
+        <main className="relative z-10 w-full flex flex-col">
           <Hero />
+          <TextReveal />
           <Skills />
-          <Projects />
+          <HorizontalProjects />
           <Contact />
-        </div>
-      </main>
-    </div>
+        </main>
+
+        <Footer />
+      </div>
+    </SmoothScroll>
   );
 }
 

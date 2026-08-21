@@ -1,44 +1,139 @@
-import { motion } from 'framer-motion';
-import { Mail, Linkedin } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Linkedin, Github, Copy, Check, ArrowUpRight, Globe } from 'lucide-react';
+import { portfolioData } from '../data/portfolioData';
 
-export const Contact = () => {
+export const Contact: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+  const { contact, profile } = portfolioData;
+  const emailAddress = profile.email;
+
+  const copyEmail = () => {
+    navigator.clipboard.writeText(emailAddress);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
   return (
-    <section className="py-24 px-8 border-t border-slate-800/50 text-center">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="max-w-2xl mx-auto flex flex-col items-center"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-white text-center">
-          Get In Touch
-        </h2>
-        <p className="text-slate-400 mb-10 max-w-lg text-center leading-relaxed">
-          I'm currently looking for new opportunities. Whether you have a question or just want to say hi,
-          I'll try my best to get back to you!
-        </p>
+    <section id="contact" className="py-20 sm:py-28 px-5 sm:px-8 md:px-16 lg:px-24 relative z-10 max-w-7xl mx-auto">
+      <div className="flex items-center gap-3 mb-5 sm:mb-6">
+        <span className="w-6 sm:w-8 h-[1px] bg-[#c4f041]" />
+        <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#c4f041]">
+          {contact.sectionLabel}
+        </span>
+      </div>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center w-full max-w-sm">
-          <a
-            href="mailto:hello@johndoe.com"
-            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition-all font-medium"
-          >
-            <Mail className="w-5 h-5" />
-            Email Me
-          </a>
-          <a
-            href="#"
-            className="flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-xl bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 border border-blue-500/20 transition-all font-medium"
-          >
-            <Linkedin className="w-5 h-5" />
-            LinkedIn
-          </a>
+      {/* Editorial Headline */}
+      <div className="mb-10 sm:mb-16">
+        <h2 className="font-display font-black text-[clamp(2.5rem,7.5vw,6.5rem)] text-white tracking-tight leading-[1.05] select-none break-words">
+          {contact.headingStart} <br className="hidden sm:inline" />
+          <span className="text-stroke hover:text-[#c4f041] transition-colors duration-500 inline-block pr-1">
+            {contact.headingStroke}
+          </span>
+          <span className="text-[#c4f041]">{contact.headingEnd}</span>
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-start border-t border-white/10 pt-8 sm:pt-12">
+        {/* Left Column: Direct Action */}
+        <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+          <p className="font-sans text-base sm:text-lg md:text-xl text-slate-300 font-light leading-relaxed max-w-xl">
+            {contact.description}
+          </p>
+
+          {/* Interactive Email Bar with Mobile Stack */}
+          <div className="glass-panel p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-3.5 overflow-hidden">
+              <div className="p-2.5 sm:p-3 rounded-xl sm:rounded-2xl bg-[#c4f041]/10 text-[#c4f041] shrink-0">
+                <Mail className="w-4 sm:w-5 h-4 sm:h-5" />
+              </div>
+              <div className="truncate">
+                <span className="font-mono text-[10px] sm:text-xs text-slate-500 uppercase tracking-wider block">
+                  PRIMARY EMAIL
+                </span>
+                <a
+                  href={`mailto:${emailAddress}`}
+                  className="font-mono text-sm sm:text-base md:text-lg font-bold text-white hover:text-[#c4f041] transition-colors truncate block"
+                >
+                  {emailAddress}
+                </a>
+              </div>
+            </div>
+
+            <button
+              onClick={copyEmail}
+              className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-xl sm:rounded-2xl bg-white/5 hover:bg-white/10 text-slate-200 hover:text-white border border-white/10 font-mono text-xs transition-all active:scale-95 cursor-pointer shrink-0"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-[#c4f041]" />
+                  <span className="text-[#c4f041]">COPIED!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 text-slate-400" />
+                  <span>COPY EMAIL</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
-      </motion.div>
-      <div className="mt-32 text-slate-500 text-sm">
-        <p>© {new Date().getFullYear()} Designed & Built by AYAS.</p>
+
+        {/* Right Column: Status & Channels */}
+        <div className="lg:col-span-5 space-y-4 sm:space-y-6">
+          <div className="glass-panel p-5 sm:p-6 rounded-2xl sm:rounded-3xl border border-white/10 space-y-3 sm:space-y-4">
+            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+              <span className="font-mono text-xs text-slate-500 uppercase">STATUS</span>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#c4f041] animate-pulse" />
+                <span className="font-mono text-xs text-[#c4f041] font-bold uppercase">{profile.status}</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between border-b border-white/5 pb-3">
+              <span className="font-mono text-xs text-slate-500 uppercase">LOCATION</span>
+              <div className="flex items-center gap-1.5 text-slate-300 font-mono text-xs">
+                <Globe className="w-3.5 h-3.5 text-slate-500" />
+                <span>{profile.location} (UTC+7)</span>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs text-slate-500 uppercase">RESPONSE TIME</span>
+              <span className="font-mono text-xs text-slate-300">{contact.responseTime}</span>
+            </div>
+          </div>
+
+          {/* Social Links List */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+            <a
+              href={profile.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl sm:rounded-2xl glass-panel border border-white/10 hover:border-[#c4f041]/40 text-slate-300 hover:text-white transition-all group"
+            >
+              <div className="flex items-center gap-2.5">
+                <Github className="w-4 h-4 text-slate-400 group-hover:text-[#c4f041] transition-colors" />
+                <span className="font-mono text-xs font-semibold">GITHUB</span>
+              </div>
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#c4f041] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+
+            <a
+              href={profile.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between p-3.5 sm:p-4 rounded-xl sm:rounded-2xl glass-panel border border-white/10 hover:border-[#c4f041]/40 text-slate-300 hover:text-white transition-all group"
+            >
+              <div className="flex items-center gap-2.5">
+                <Linkedin className="w-4 h-4 text-slate-400 group-hover:text-[#c4f041] transition-colors" />
+                <span className="font-mono text-xs font-semibold">LINKEDIN</span>
+              </div>
+              <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#c4f041] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );
 };
+

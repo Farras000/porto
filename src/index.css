@@ -1,15 +1,131 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: 'Syne', sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-accent: #c4f041;
+  --color-accent-muted: #9abf28;
+  --color-surface: #0b0e14;
+  --color-surface-card: #0f141f;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+}
+
 :root {
-  --background: #0f172a;
-  --foreground: #f8fafc;
+  --background: #07090e;
+  --foreground: #f1f5f9;
+  --accent: #c4f041;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
+
+/* Lenis smooth scrolling rules */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Marquee infinite scroll */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07090e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Glass & Texture utilities */
+.glass-panel {
+  background: rgba(15, 20, 31, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel:hover {
+  border-color: rgba(196, 240, 65, 0.25);
+}
+
+.text-stroke {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.55);
+  color: transparent;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.text-stroke:hover {
+  -webkit-text-stroke: 1.5px #c4f041;
+  color: #c4f041;
+  text-shadow: 0 0 30px rgba(196, 240, 65, 0.25);
+}
+
+.text-stroke-accent {
+  -webkit-text-stroke: 1.5px #c4f041;
+  color: transparent;
+}
+
