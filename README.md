@@ -10,7 +10,7 @@
   </p>
   
   <p align="center">
-    <b>A modern portfolio landing page designed with stunning dark themes, smooth animations, and automatic visitor analytics.</b>
+    <b>A modern portfolio landing page designed with stunning dark themes and smooth animations.</b>
   </p>
 </div>
 
@@ -24,8 +24,8 @@ An engaging, visually striking introduction using a premium dark theme aesthetic
 🚀 **Skill & Project Showcase**  
 Beautifully animated grid layouts explicitly displaying your technical expertise and highlighted works.
 
-📊 **Automated Visitor Analytics**  
-Smart tracking using `useEffect` that silently logs visitor data (IP, Location, ISP, Device, OS, Browser, Screen Resolution, Language) straight to a private Discord Webhook!
+🌌 **Immersive 3D Particle Universe**  
+A scroll-reactive WebGL background layer that morphs between shapes as you navigate the page.
 
 🎨 **Silky Smooth Animations**  
 Seamless page transitions, scroll-triggered fade-ins, and gorgeous micro-interactions powered by `framer-motion`.
@@ -38,18 +38,16 @@ Flawlessly styled with Tailwind CSS v4, guaranteeing a perfect experience on any
 ## 📂 Project Structure
 
 ```text
-📦 portfolio
+ 📦 portfolio
  ┣ 📂 public/              # Static assets (Favicon, etc.)
  ┣ 📂 src/
  ┃ ┣ 📂 assets/            # Images, icons, and illustrations
  ┃ ┣ 📂 components/        # Reusable UI React components
- ┃ ┣ 📂 hooks/             # Custom React hooks (e.g. useVisitorTracking)
+ ┃ ┣ 📂 three/             # WebGL particle universe layer
  ┃ ┣ 📂 utils/             # Helper functions & constants
  ┃ ┣ 📜 App.tsx            # Main application root component
- ┃ ┣ 📜 App.css            # Global component styles
  ┃ ┣ 📜 index.css          # Tailwind directives & theme configuration
  ┃ ┗ 📜 main.tsx           # React DOM injection point
- ┣ 📜 .env                 # Environment variables (Discord Webhook)
  ┣ 📜 package.json         # Project dependencies & scripts
  ┗ 📜 vite.config.ts       # Vite bundler configuration
 ```
@@ -77,15 +75,7 @@ Install all required dependencies:
 bun install
 ```
 
-### 3. Setup Environment Variables
-
-To get the Visitor Analytics working, create a `.env` file at the root of the project:
-
-```env
-VITE_DISCORD_WEBHOOK_URL=your_discord_webhook_url_here
-```
-
-### 4. Run the Development Server
+### 3. Run the Development Server
 
 Fire up the local dev server:
 

@@ -39,7 +39,7 @@ export const ScrollProgress: React.FC = () => {
   }, []);
 
   const scrollToSection = (id: string) => {
-    smoothScrollTo('#' + id, { duration: 1.8 });
+    smoothScrollTo('#' + id, { duration: 2.2 });
   };
 
   return (
@@ -47,7 +47,7 @@ export const ScrollProgress: React.FC = () => {
       {/* Mobile top progress bar */}
       <div className="fixed top-0 left-0 right-0 h-[2px] bg-white/5 z-50 md:hidden">
         <div
-          className="h-full bg-[#c4f041] transition-all duration-150 ease-out"
+          className="h-full bg-[var(--accent)] transition-all duration-150 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -71,7 +71,7 @@ export const ScrollProgress: React.FC = () => {
                 <span
                   className={`font-mono text-[10px] uppercase tracking-widest transition-all duration-300 pointer-events-none ${
                     isActive
-                      ? 'text-[#c4f041] opacity-100 translate-x-0'
+                      ? 'text-[var(--accent)] opacity-100 translate-x-0'
                       : 'text-slate-500 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0'
                   }`}
                 >
@@ -83,14 +83,14 @@ export const ScrollProgress: React.FC = () => {
                   <div
                     className={`rounded-full transition-all duration-300 ${
                       isActive
-                        ? 'w-2.5 h-2.5 bg-[#c4f041] shadow-[0_0_8px_#c4f041]'
+                        ? 'w-2.5 h-2.5 bg-[var(--accent)] shadow-[0_0_8px_var(--accent-muted)]'
                         : 'w-1.5 h-1.5 bg-slate-600 group-hover:bg-slate-400 group-hover:scale-125'
                     }`}
                   />
                   {isActive && (
                     <motion.div
                       layoutId="activeDotRing"
-                      className="absolute inset-0 rounded-full border border-[#c4f041]/40 animate-ping"
+                      className="absolute inset-0 rounded-full border border-[var(--accent)]/40 animate-ping"
                       transition={{ duration: 1.5, repeat: Infinity }}
                     />
                   )}
@@ -107,7 +107,7 @@ export const ScrollProgress: React.FC = () => {
           </span>
           <div className="w-[1px] h-12 bg-white/10 relative overflow-hidden rounded-full">
             <div
-              className="w-full bg-[#c4f041] transition-all duration-150 absolute top-0"
+              className="w-full bg-[var(--accent)] transition-all duration-150 absolute top-0"
               style={{ height: `${progress}%` }}
             />
           </div>

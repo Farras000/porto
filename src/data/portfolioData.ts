@@ -34,7 +34,7 @@ export const portfolioData = {
     bioIntro: "Hi, I'm Ravyanda Farras Ibrahim — everyone calls me Farras.",
     bioShort:
       'Building clean, reliable, and user-focused web applications with modern architecture and thoughtful attention to detail.',
-    email: 'farras@example.com', // Replace with your real email
+    email: 'f4rrasi@gmail.com', // Replace with your real email
     github: 'https://github.com/Farras000', // Replace with your GitHub URL
     linkedin: 'https://linkedin.com/in/farras', // Replace with your LinkedIn URL
     location: 'Indonesia',

@@ -5,8 +5,9 @@
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --color-accent: #c4f041;
-  --color-accent-muted: #9abf28;
+  --color-accent: var(--accent);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-glow: var(--accent-glow);
   --color-surface: #0b0e14;
   --color-surface-card: #0f141f;
   --color-border-subtle: rgba(255, 255, 255, 0.08);
@@ -16,6 +17,8 @@
   --background: #07090e;
   --foreground: #f1f5f9;
   --accent: #c4f041;
+  --accent-glow: #eaffa8;
+  --accent-muted: rgba(196, 240, 65, 0.4);
 }
 
 body {
@@ -47,6 +50,43 @@ html.lenis, html.lenis body {
 
 .lenis.lenis-scrolling iframe {
   pointer-events: none;
+}
+
+/* ── 3D Particle Universe canvas layer ───────────────────────────── */
+.universe-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-color: #040109;
+}
+
+/* ── Project track edge fades (theme-proof: masks, not colored gradients) ── */
+.mask-fade-l {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 56px);
+  mask-image: linear-gradient(to right, transparent 0, #000 56px);
+}
+
+.mask-fade-r {
+  -webkit-mask-image: linear-gradient(to left, transparent 0, #000 56px);
+  mask-image: linear-gradient(to left, transparent 0, #000 56px);
+}
+
+.mask-fade-l.mask-fade-r {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 56px,
+    #000 calc(100% - 56px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 56px,
+    #000 calc(100% - 56px),
+    transparent 100%
+  );
 }
 
 /* Marquee infinite scroll */
@@ -129,3 +169,122 @@ html.lenis, html.lenis body {
   color: transparent;
 }
 
+/* ── Subtle visual polish utilities ─────────────────────────────── */
+
+/* Soft animated shimmer for accent text / badges */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-accent {
+  background: linear-gradient(
+    100deg,
+    var(--accent) 0%,
+    var(--accent-glow) 25%,
+    var(--accent) 50%,
+    var(--accent-glow) 75%,
+    var(--accent) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+
+/* Gentle pulsing glow behind the hero name */
+@keyframes heroGlow {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+
+.hero-glow {
+  animation: heroGlow 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Slow aurora drift for CSS-based ambient layers */
+@keyframes auroraDrift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -3%, 0) scale(1.08);
+  }
+}
+
+.animate-aurora {
+  animation: auroraDrift 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Custom Cursor Hide Native */
+@media (pointer: fine) {
+  body:has([data-cursor-hide="true"]) {
+    cursor: none;
+  }
+  body:has([data-cursor-hide="true"]) a,
+  body:has([data-cursor-hide="true"]) button,
+  body:has([data-cursor-hide="true"]) [role="button"] {
+    cursor: none;
+  }
+}
+
+/* Gentle vertical float for decorative elements (scroll indicator, orbs) */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Hover lift: subtle translateY + shadow for cards/buttons */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease,
+    box-shadow 0.35s ease, background-color 0.3s ease;
+  will-change: transform;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px -12px rgba(0, 0, 0, 0.6);
+}
+
+/* Respect reduced-motion: disable decorative animations */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-accent,
+  .hero-glow,
+  .animate-aurora,
+  .animate-float {
+    animation: none !important;
+  }
+  .hover-lift {
+    transition: none !important;
+  }
+  .hover-lift:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  /* Notice: .animate-marquee is intentionally excluded here so it still moves */
+}

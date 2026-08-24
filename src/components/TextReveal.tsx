@@ -23,7 +23,7 @@ const Word: React.FC<WordProps> = ({ children, progress, range, isHighlight }) =
           scale,
         }}
         className={`inline-block font-display font-medium tracking-tight will-change-[filter,opacity,transform] ${
-          isHighlight ? 'text-[#c4f041] font-bold' : 'text-slate-100'
+          isHighlight ? 'text-[var(--accent)] font-bold' : 'text-slate-100'
         }`}
       >
         {children}
@@ -53,8 +53,8 @@ export const TextReveal: React.FC = () => {
       className="min-h-[60vh] sm:min-h-[70vh] flex flex-col justify-center px-5 sm:px-8 md:px-16 lg:px-24 py-20 sm:py-28 relative z-10 max-w-7xl mx-auto"
     >
       <div className="flex items-center gap-3 mb-6 sm:mb-8">
-        <span className="w-6 sm:w-8 h-[1px] bg-[#c4f041]" />
-        <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#c4f041]">
+        <span className="w-6 sm:w-8 h-[1px] bg-[var(--accent)]" />
+        <span className="font-mono text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[var(--accent)]">
           {about.sectionLabel}
         </span>
       </div>
@@ -97,8 +97,8 @@ export const TextReveal: React.FC = () => {
             STATUS
           </span>
           <div className="flex items-center gap-2 mt-1">
-            <span className="w-2 h-2 rounded-full bg-[#c4f041] animate-pulse" />
-            <span className="font-mono text-xs text-[#c4f041] tracking-wider uppercase">
+            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
+            <span className="font-mono text-xs text-[var(--accent)] tracking-wider uppercase">
               {profile.status}
             </span>
           </div>
